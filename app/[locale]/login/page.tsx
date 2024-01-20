@@ -5,8 +5,13 @@ import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/supabase/server"
 import { Database } from "@/supabase/types"
 import { createServerClient } from "@supabase/ssr"
+import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+  title: "Login"
+}
 
 export default async function Login({
   searchParams
@@ -45,7 +50,7 @@ export default async function Login({
     })
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user")
+      return redirect(`/login?message=${error.message}`)
     }
 
     return redirect("/chat")
@@ -70,7 +75,7 @@ export default async function Login({
 
     if (error) {
       console.error(error)
-      return redirect("/login?message=Could not authenticate user")
+      return redirect(`/login?message=${error.message}`)
     }
 
     return redirect("/setup")
@@ -92,9 +97,10 @@ export default async function Login({
     })
 
     if (error) {
-      console.error(error)
-      return redirect("/login?message=Could not reset password")
+      return redirect(`/login?message=${error.message}`)
     }
+
+    return redirect("/login?message=Check email to reset password")
   }
 
   return (
